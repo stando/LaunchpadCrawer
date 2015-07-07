@@ -81,7 +81,8 @@ class LaunchpadCrawler:
                            output_file="output_bugs.xml",
                            bug_amount=100,
                            write_through=False,
-                           trunk_size=1000):
+                           trunk_size=1000,
+                           pretty_print=False):
 
         for name in project_names:
             project = self.launchpad.projects(name)
@@ -145,7 +146,7 @@ class LaunchpadCrawler:
 
                     elif output_type == "xml":
                         writer = xmlWriter(bugs_data, "bugs", "All bugs belong to project OpenStack")
-                        writer.write_to_file(out_file, pretty=True)
+                        writer.write_to_file(out_file, pretty=pretty_print)
 
                     elif output_type == "csv":
                         writer = csvWriter(bugs_data)
@@ -166,7 +167,7 @@ class LaunchpadCrawler:
 
             elif output_type == "xml":
                 writer = xmlWriter(bugs_data, "bugs", "All bugs belong to project OpenStack")
-                writer.write_to_file(output_file, pretty=True)
+                writer.write_to_file(output_file, pretty=pretty_print)
 
             elif output_type == "csv":
                 writer = csvWriter(bugs_data)
@@ -187,7 +188,8 @@ class LaunchpadCrawler:
                                  output_file="output_blueprints.xml",
                                  amount=100,
                                  write_through=False,
-                                 trunk_size=10):
+                                 trunk_size=10,
+                                 pretty_print=False):
 
         for name in project_names:
             project = self.launchpad.projects(name)
@@ -256,7 +258,7 @@ class LaunchpadCrawler:
 
                     elif output_type == "xml":
                         writer = xmlWriter(blueprints_data, "bugs", "All bugs belong to project OpenStack")
-                        writer.write_to_file(out_file, pretty=False)
+                        writer.write_to_file(out_file, pretty=pretty_print)
 
                     elif output_type == "csv":
                         writer = csvWriter(blueprints_data)
@@ -277,7 +279,7 @@ class LaunchpadCrawler:
 
             elif output_type == "xml":
                 writer = xmlWriter(blueprints_data, "blueprints", "All blueprints belong to project OpenStack")
-                writer.write_to_file(output_file, pretty=False)
+                writer.write_to_file(output_file, pretty=pretty_print)
 
             elif output_type == "csv":
                 writer = csvWriter(blueprints_data)
