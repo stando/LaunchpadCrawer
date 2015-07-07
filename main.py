@@ -1,24 +1,41 @@
 __author__ = 'Yijun Pan'
 
-from launchpadCrawler import LaunchpadCrawler
-
+#from launchpadCrawler import LaunchpadCrawler
+import buildDepTrees
 
 def get_bug_data(crawler):
     attributes=['date_created', 'date_assigned', 'date_closed',
                                        'bug_target_name',
-                                       'status', 'is_complete',
+                                       'web_link',
+                                       'status', 'is_complete', 'importance',
                                        'owner', 'assignee']
     project_names = ['openstack']
-    output_file = 'openstack_bugs.xml'
+    output_file = '100_bugs.xml'
 
     crawler.crawl_project_bugs(project_names=project_names, attributes=attributes,
-                               output_file=output_file, output_type='xml')
+                               output_file=output_file, output_type='xml', bug_amount=100)
+
+def get_blueprint_dependencies(crawler):
+    attributes=['dependencies']
+    project_names = ['openstack']
+    output_file = 'blueprints.xml'
+
+    crawler.crawl_project_blueprints(project_names=project_names, attributes=attributes,
+                                     output_file=output_file, output_type='xml', amount=0,
+                                     write_through=True, trunk_size=1000)
+
+
 
 
 
 def main():
-    crawler = LaunchpadCrawler('just testing', 'production', 'cache')
-    get_bug_data(crawler)
+    #crawler = LaunchpadCrawler('just testing', 'production', 'cache')
+    #get_bug_data(crawler)
+    #get_blueprint_dependencies(crawler)
+    index_filename = "blueprint_unique.csv"
+    dependency_filename = "blueprints"
+    buildDepTrees.build_dependency_tree(index_filename, dependency_filename)
+
 
 if __name__ == "__main__":
     main()

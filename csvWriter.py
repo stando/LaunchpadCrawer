@@ -14,11 +14,12 @@ class csvWriter:
 
         with open(output_file, 'wb') as fp:
             fieldnames = self.__dataset[0].__dict__.keys()
-            writer = csv.DictWriter(fp, fieldnames=fieldnames, delimiter=delimiter)
+            writer = csv.writer(fp, delimiter=delimiter)
 
             # Write the first row with names of attributes
-            writer.writeheader()
+            writer.writerow(map(str, fieldnames))
 
             # Write values line by line
             for data in self.__dataset:
-                writer.writerow(data.__dict__.values())
+                s = map(str, data.__dict__)
+                writer.writerow(map(str, data.__dict__.values()))
