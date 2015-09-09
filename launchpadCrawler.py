@@ -6,35 +6,7 @@ from csvWriter import csvWriter
 
 import os
 import sys
-
-
-class Project:
-    name = None
-
-    def __init__(self, name="undefined"):
-        self.name = name
-
-    def list_attributes(self):
-        print self.__dict__.keys()
-
-class Bug:
-    title = None
-
-    def __init__(self, title="undefined"):
-        self.title = title
-
-    def list_attributes(self):
-        print self.__dict__.keys()
-
-
-class Blueprint:
-    name = None
-
-    def __init__(self, name="undefined"):
-        self.name = name
-
-    def list_attributes(self):
-        print self.__dict__.keys()
+import dataStruct
 
 # TODO: Make launchpadCrawler faster with multiprocessing
 # TODO: Add a routine to check reviews
@@ -209,7 +181,7 @@ class LaunchpadCrawler:
                         break
 
                 entry_count += 1
-                blueprint_data = Blueprint(blueprint.name)
+                blueprint_data = Blueprint(blueprint.name+"("+blueprint.target.name+")")
 
                 for attribute in attributes:
                     # Creator of the bug event
@@ -235,11 +207,11 @@ class LaunchpadCrawler:
                         else:
                             dep_names = []
                             for dep in dependencies:
-                                dep_names.append(dep.name)
+                                dep_names.append(dep.name+"("+dep.target.name+")")
                             setattr(blueprint_data, 'dependencies', dep_names)
                     else:
                         value = getattr(blueprint, attribute)
-                        setattr(bug_data, attribute, value)
+                        setattr(blueprint_data, attribute, value)
 
                 blueprints_data.append(blueprint_data)
 

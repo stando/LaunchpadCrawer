@@ -65,13 +65,13 @@ class xmlWriter:
                 attr_element = ET.SubElement(data_element, attribute)
 
                 if not isinstance(value, list):
-                    attr_element.text = str(value)
+                    attr_element.text = unicode(value)
                 else:
                     for i, v in enumerate(value):
-                        sub_elem = ET.SubElement(attr_element, "dependency")
+                        sub_elem = ET.SubElement(attr_element, "elem")
                         sub_elem.text = str(v)
 
-        # Use pretty print carefullyÅ
+        # Use pretty print carefully
         if pretty:
             self.indent(root)
 

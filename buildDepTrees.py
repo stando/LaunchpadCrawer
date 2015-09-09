@@ -2,6 +2,7 @@ __author__ = 'Yijun Pan'
 
 import csv
 from graph_tool import *
+from graph_tool import topology
 import glob
 from lxml import etree as ET
 
@@ -85,6 +86,47 @@ def build_dependency_tree(index_filename, dependency_filename, output_file="dep_
                 writer.writerow([out_degree[i]])
     fp.close()
 
+
+def find_connected_component_label(index_filename, dependency_filename, output_file="dep_tree_cc_label"):
+    graph = Graph()
+    # Index start with 1
+    blueprint_index = read_blueprint_index(index_filename)
+
+    # All dependency file should be like filename_*.xml
+    filename_pattern = dependency_filename+"_*.xml"
+    #filename_pattern = "blueprints.xml"
+    filenames = glob.glob(filename_pattern)
+
+    print filenames
+
+    print len(blueprint_index)
+    key, value = max(blueprint_index.iteritems(), key=lambda x:x[1])
+
+    print value
+
+    graph.add_vertex(len(blueprint_index)+1)
+
+    for filename in filenames:
+        read_dependency(filename, blueprint_index, graph)
+
+    cc_label = ['cc_label']
+    cc_hist = ['cc_hist']
+
+    comp, hist = topology.label_components(graph, directed=False)
+
+
+    for i in range(1, len(blueprint_index)+1):
+        cc_label.append(comp.a[i])
+        cc_hist.append(hist[comp.a[i]])
+
+
+    output_file += ".csv"
+    with open(output_file, 'wb') as fp:
+        writer = csv.writer(fp)
+        for i in range(0, len(blueprint_index)+1):
+            writer.writerow([cc_label[i], cc_hist[i]])
+
+    fp.close()
 
 
 
